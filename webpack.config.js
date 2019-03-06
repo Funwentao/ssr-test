@@ -7,7 +7,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry :{
-        index: "./src/main.js"
+        index: "./src/entry-client.js"
     },
     output:{
         path: path.resolve(__dirname,'dist'),

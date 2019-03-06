@@ -5,10 +5,13 @@ const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const webpack = require('webpack');
 
 module.exports = {
-    entry: './src/main.js',
+    mode: 'development',
+    resolve: {
+        extensions: ['.js', '.vue']
+    },
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: ''
+        filename: '[name].bundle.js'
     },
     module: {
         rules: [{
@@ -20,7 +23,7 @@ module.exports = {
         }, {
             test: /\.css$/,
             loader: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
+                fallback: 'vue-style-loader',
                 use: ['css-loader']
             })
         }, {
@@ -30,7 +33,7 @@ module.exports = {
             test: /\.less$/,
             //loader: "style-loader!css-loader!less-loader",
             loader: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
+                fallback: 'vue-style-loader',
                 use: ['css-loader', 'less-loader']
             })
         }, {
@@ -39,22 +42,22 @@ module.exports = {
         }]
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            title: '首页',
-            filename: 'index.html',
-            template: './index.html',
-            chunks:['index']
-        }),
+        // new HtmlWebpackPlugin({
+        //     title: '首页',
+        //     filename: 'index.html',
+        //     template: '../index.html',
+        //     chunks:['index']
+        // }),
         new VueLoaderPlugin(),
-        new ExtractTextPlugin("./css/[name].css"),
-        new webpack.HotModuleReplacementPlugin()
-    ],
-    devServer: {
-        contentBase:path.resolve(__dirname,'dist'),
-        historyApiFallback: true,
-        inline: true,
-        host: 'localhost',
-        port: '8080',
-        open: true
-    }
+        new ExtractTextPlugin("./css/[name].css")
+        // new webpack.HotModuleReplacementPlugin()
+    ]
+    // devServer: {
+    //     contentBase:path.resolve(__dirname,'../dist'),
+    //     historyApiFallback: true,
+    //     inline: true,
+    //     host: 'localhost',
+    //     port: '8080',
+    //     open: true
+    // }
 }

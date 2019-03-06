@@ -1,24 +1,29 @@
-const Vue = require('vue')
-const server = require('express')()
-const vm = require('../src/main').default
+const fs = require('fs')
+// const Vue = require('vue')
+const express = require('express')
+const backendApp = express()
+const frontendApp = express()
+const path = require('path')
+// const vm = require('../src/main').default
 
-const app = new Vue({
-    data: {
-        msg: 'Hello Vue SSR'
-    },
-    template: `<div>{{msg}}</div>`
-})
+// const app = new Vue({
+//     data: {
+//         msg: 'Hello Vue SSR'
+//     },
+//     template: `<div>{{msg}}</div>`
+// })
 
-console.log(app,'app')
-console.log(vm, 'vm')
+const bundle = fs.readFileSync(path.resolve(__dirname, '../dist/server.bundle.js'), 'utf-8');
+const renderer = require('vue-server-renderer').createBundleRenderer(bundle, {
+    template: fs.readFileSync(path.resolve(__dirname, '../dist/index.ssr.html'), 'utf-8')
+});
+  
 
+backendApp.use(express.static(path.join(__dirname, '../dist')))
+frontendApp.use(express.static(path.join(__dirname, '../dist')))
 
-const renderer = require('vue-server-renderer').createRenderer({
-    template: require('fs').readFileSync('../index.ssr.html', 'utf-8')
-})
-
-server.get('*', (req, res) => {
-    renderer.renderToString(vm, (err, html) => {
+backendApp.get('/index', (req, res) => {
+    renderer.renderToString((err, html) => {
         if(err) {
             console.log(err)
             res.status(500).end('Internal Server Error')
@@ -28,5 +33,15 @@ server.get('*', (req, res) => {
     })
 })
 
-server.listen(8000)
-console.log('running on port 8000.........')
+frontendApp.get('/index', (req, res) => {
+    let html = fs.readFileSync(path.resolve(__dirname, '../dist/index.html'), 'utf-8');
+    res.end(html)
+})
+
+backendApp.listen(8000, () =>{
+    console.log('服务器端渲染地址： http://localhost:8000')
+})
+
+frontendApp.listen(8001, () =>{
+    console.log('浏览器端渲染地址： http://localhost:8001')
+})
