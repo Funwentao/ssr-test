@@ -1,6 +1,6 @@
 const Vue = require('vue')
 const server = require('express')()
-const vm = require('../src/main')
+const vm = require('../src/main').default
 
 const app = new Vue({
     data: {
@@ -9,13 +9,16 @@ const app = new Vue({
     template: `<div>{{msg}}</div>`
 })
 
+console.log(app,'app')
+console.log(vm, 'vm')
+
 
 const renderer = require('vue-server-renderer').createRenderer({
     template: require('fs').readFileSync('../index.ssr.html', 'utf-8')
 })
 
 server.get('*', (req, res) => {
-    renderer.renderToString(app, (err, html) => {
+    renderer.renderToString(vm, (err, html) => {
         if(err) {
             console.log(err)
             res.status(500).end('Internal Server Error')

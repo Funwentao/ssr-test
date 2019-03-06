@@ -9,7 +9,10 @@ Vue.use(vueRouter)
 // }).$mount('#app');
 
 const vm = new Vue({
-    template: '<div>Hello Vue SSR</div>'
+    data: {
+        msg: 'Hello Vue SSR'
+    },
+    template: `<div>{{msg}}</div>`
 })
 
 export default vm
