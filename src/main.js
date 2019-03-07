@@ -1,26 +1,16 @@
-import Vue from 'vue';
-import App from './app.vue';
-import vueRouter from 'vue-router';
+import Vue from 'vue'
+import App from './app.vue'
+import vueRouter from 'vue-router'
+import {createRouter} from './router'
 
 Vue.use(vueRouter)
 
-// const vm = new Vue({
-//     render: h => h(app)
-// }).$mount('#app');
-
-// const vm = new Vue({
-//     data: {
-//         msg: 'Hello Vue SSR'
-//     },
-//     template: `<div>{{msg}}</div>`
-// })
-
-// export default vm
-
 export function createApp() {
+    const router = createRouter()
     const app = new Vue({
+        router,
         render: h => h(App)
     })
 
-    return { app }
+    return { app, router }
 }

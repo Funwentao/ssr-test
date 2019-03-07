@@ -10,7 +10,8 @@ module.exports = merge(base, {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '../index.html'),
-      filename: 'index.html'
+      filename: 'index.html',
+      title: '首页'
     })
   ]
 })

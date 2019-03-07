@@ -22,18 +22,20 @@ const renderer = require('vue-server-renderer').createBundleRenderer(bundle, {
 backendApp.use(express.static(path.join(__dirname, '../dist')))
 frontendApp.use(express.static(path.join(__dirname, '../dist')))
 
-backendApp.get('/index', (req, res) => {
+backendApp.get('*', (req, res) => {
     renderer.renderToString((err, html) => {
         if(err) {
-            console.log(err)
-            res.status(500).end('Internal Server Error')
-            return
+            if(err.code === 404) {
+                res.status(404).end('page not found')
+            } else {
+                res.status(500).end('Internal Server Error')
+            }
         }
         res.end(html)
     })
 })
 
-frontendApp.get('/index', (req, res) => {
+frontendApp.get('*', (req, res) => {
     let html = fs.readFileSync(path.resolve(__dirname, '../dist/index.html'), 'utf-8');
     res.end(html)
 })

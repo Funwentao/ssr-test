@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Hello</title>
+  <title><%= htmlWebpackPlugin.options.title %></title>
 </head>
 <body>
 <!--vue-ssr-outlet-->
+<script type="text/javascript" src="<%= htmlWebpackPlugin.options.files.js %>"></script>
 </body>
 </html>

@@ -1,8 +1,8 @@
 const path = require("path");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const webpack = require('webpack');
+// const webpack = require('webpack');
 
 module.exports = {
     mode: 'development',
@@ -11,7 +11,8 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: '[name].bundle.js'
+        filename: '[name].bundle.js',
+        publicPath: "/"
     },
     module: {
         rules: [{
@@ -49,7 +50,7 @@ module.exports = {
         //     chunks:['index']
         // }),
         new VueLoaderPlugin(),
-        new ExtractTextPlugin("./css/[name].css")
+        new ExtractTextPlugin("css/[name].css")
         // new webpack.HotModuleReplacementPlugin()
     ]
     // devServer: {
