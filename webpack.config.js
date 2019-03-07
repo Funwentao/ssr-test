@@ -47,7 +47,8 @@ module.exports = {
         inline: true,
         host: 'localhost',
         port: '8080',
-        open: true
+        open: true,
+        hot: true
     },
     plugins: [
         new HtmlWebpackPlugin({
