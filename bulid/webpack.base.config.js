@@ -11,8 +11,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: '[name].bundle.js',
-        publicPath: "/"
+        filename: '[name].bundle.js'
     },
     module: {
         rules: [{
@@ -50,7 +49,7 @@ module.exports = {
         //     chunks:['index']
         // }),
         new VueLoaderPlugin(),
-        new ExtractTextPlugin("css/[name].css")
+        new ExtractTextPlugin("/css/[name].css")
         // new webpack.HotModuleReplacementPlugin()
     ]
     // devServer: {
