@@ -1,9 +1,9 @@
 <template>
-  <!--<router-view></router-view>-->
-  <div>
+  <router-view></router-view>
+  <!-- <div>
     <about></about>
     <home></home>
-  </div>
+  </div> -->
 </template>
 
 <script>

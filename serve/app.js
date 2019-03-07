@@ -4,6 +4,9 @@ const express = require('express')
 const backendApp = express()
 const frontendApp = express()
 const path = require('path')
+const createApp = require('../dist/server.bundle.js').default
+
+// console.log(createApp())
 // const vm = require('../src/main').default
 
 // const app = new Vue({
@@ -13,25 +16,31 @@ const path = require('path')
 //     template: `<div>{{msg}}</div>`
 // })
 
-const bundle = fs.readFileSync(path.resolve(__dirname, '../dist/server.bundle.js'), 'utf-8');
-const renderer = require('vue-server-renderer').createBundleRenderer(bundle, {
-    template: fs.readFileSync(path.resolve(__dirname, '../dist/index.ssr.html'), 'utf-8')
-});
+// const bundle = fs.readFileSync(path.resolve(__dirname, '../dist/server.bundle.js'), 'utf-8');
+// const renderer = require('vue-server-renderer').createBundleRenderer(bundle, {
+//     template: fs.readFileSync(path.resolve(__dirname, '../dist/index.ssr.html'), 'utf-8')
+// });
   
+const renderer = require('vue-server-renderer').createRenderer()
 
 backendApp.use(express.static(path.join(__dirname, '../dist')))
 frontendApp.use(express.static(path.join(__dirname, '../dist')))
 
 backendApp.get('*', (req, res) => {
-    renderer.renderToString((err, html) => {
-        if(err) {
-            if(err.code === 404) {
-                res.status(404).end('page not found')
+    const context = {url: req.url}
+    
+    createApp(context).then(app => {
+        renderer.renderToString(app, (err, html) => {
+            if(err) {
+                if(err.code === 404) {
+                    res.status(404).end('page not found')
+                } else {
+                    res.status(500).end('Internal Server Error')
+                }
             } else {
-                res.status(500).end('Internal Server Error')
+                res.end(html)
             }
-        }
-        res.end(html)
+        })
     })
 })
 
