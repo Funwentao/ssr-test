@@ -16,22 +16,24 @@ const createApp = require('../dist/server.bundle.js').default
 //     template: `<div>{{msg}}</div>`
 // })
 
-// const bundle = fs.readFileSync(path.resolve(__dirname, '../dist/server.bundle.js'), 'utf-8');
-// const renderer = require('vue-server-renderer').createBundleRenderer(bundle, {
-//     template: fs.readFileSync(path.resolve(__dirname, '../dist/index.ssr.html'), 'utf-8')
-// });
+const bundle = fs.readFileSync(path.resolve(__dirname, '../dist/server.bundle.js'), 'utf-8');
+const renderer = require('vue-server-renderer').createBundleRenderer(bundle, {
+    template: fs.readFileSync(path.resolve(__dirname, '../dist/index.ssr.html'), 'utf-8')
+});
   
-const renderer = require('vue-server-renderer').createRenderer()
+// const renderer = require('vue-server-renderer').createRenderer()
 
 backendApp.use(express.static(path.join(__dirname, '../dist')))
 frontendApp.use(express.static(path.join(__dirname, '../dist')))
 
 backendApp.get('*', (req, res) => {
+    console.log(req.url)
     const context = {url: req.url}
     
     createApp(context).then(app => {
         renderer.renderToString(app, (err, html) => {
             if(err) {
+                console.log(err)
                 if(err.code === 404) {
                     res.status(404).end('page not found')
                 } else {
